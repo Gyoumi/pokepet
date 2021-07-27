@@ -6,7 +6,7 @@ def binarySearchExpGain(level):
     mid = 1
     while start < end:
         mid = start + ((end - start)//2)
-        rand = random.randrange(0, 101) * (0.023 * max(level, 70))
+        rand = random.randrange(0, 101) * int(0.023 * min(level, 70))
         if rand > 50:
             start = mid + 1
         else:
@@ -15,5 +15,6 @@ def binarySearchExpGain(level):
     if mid > 400:
         mid *= 5
 
-    enemy = random.randrange(-5, 6)
+    enemy = random.randrange(-5, 5)
+    print("enemy is", enemy, "mid is", mid)
     return mid, enemy

@@ -40,3 +40,5 @@ def getPokemonSpriteBytes(name):
         print('using Gen 6+ image')
         return getBinary(url + img)
 
+def getBaseFriendship(mon):
+    return mon.base_happiness

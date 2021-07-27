@@ -4,10 +4,12 @@ import client as pAPI
 import requests
 import util
 import os
+import datetime
 
 class Player:
     #each Pokemon has characteristics in following format:
-    #   _id, Level, XP, XPCaps
+    #   _id, level, XP, XPCaps, sprite, {meters}
+    # meters {hunger, clean, affection, friendship}
 
     url = os.environ.get("MON_CLUSTER1")
     cluster = MongoClient(url)
@@ -24,21 +26,25 @@ class Player:
         await ctx.channel.send("Please use the `p.start` command to pick your first Pokémon!")
         
     async def createUser(self, starterName):
-        try:
+        try:    # first checking if user input a Pokedex number instead of a name
             id = int(starterName)
             name, mon = pAPI.findPokemon(id)
         except (ValueError, requests.exceptions.HTTPError) as exception:
             print(f'Caught error in createUser() method: {exception}')
             name, mon = pAPI.findPokemon(starterName.casefold())
-        if mon is None:
+        if mon is None:     # invalid dex number and/or name
             return False, mon
         
         growth = pAPI.getExpRate(mon)
-        growth.append(0)
+        growth.append(0)    #just to make the array size 101 :)
 
-        binary = pAPI.getPokemonSpriteBytes(name)
+        binary = pAPI.getPokemonSpriteBytes(name)   #bytes for sprite gif
+
+        friendship = pAPI.getBaseFriendship(mon)
+        currTime = datetime.datetime.now()
+        meters = {"hunger": {"level":255, "time": currTime}, "clean": {"level": 64, "time": currTime}, "affection": {"level": 0, "time": currTime}, "friendship": friendship}
         
-        starter = {"name": name, "Level": 1, "XP": 0, "XPCaps": growth, "sprite": binary}
+        starter = {"name": name, "level": 5, "XP": 0, "XPCaps": growth, "sprite": binary, "meters": meters}
         self.updateDB({"_id": self.id, "Pokemon": starter})
         return True, starter["name"]
         
@@ -50,13 +56,13 @@ class Player:
 
     async def expGain(self, message):
         current = self.status
-        if current['Level'] == 100:
+        if current['level'] == 100:
             return
-        level = current['Level']
+        level = current['level']
         old = current["XP"]
         cap = current['XPCaps'][level]
         b, enemy = util.binarySearchExpGain(level)
-        enemy = max(1, level + enemy)
+        enemy = min(max(1, level + enemy), 100)
         gain = (old + int((b * enemy / 5) * (((2 * enemy + 10) / (enemy + level + 10))**2.5)))
         print(gain - old, gain, cap)
         remaining = max(cap - gain, cap)
@@ -72,7 +78,7 @@ class Player:
         if growth > 0:
             #level up
             update['$inc'] = {
-                'Pokemon.Level': growth,
+                'Pokemon.level': growth,
                 }
             await message.channel.send(self.levelDefault(growth))
         self.updateUser(update)
@@ -82,7 +88,7 @@ class Player:
         self.user = self.getUser()
 
     def levelDefault(self, growth):
-        return f'__**Congratulations!**__ Your {self.status.get("name")} has reached level {self.status.get("Level")+growth}!'
+        return f'__**Congratulations!**__ Your {self.status.get("name")} has reached level {self.status.get("level")+growth}!'
 
     def levelUpMessage(self):
         if self.user.get('levelMessage') is not None:
@@ -96,3 +102,21 @@ class Player:
                 'levelMessage': message
             }
         })
+
+    def getMeters(self):
+        return self.status.get("meters")
+
+    def updateMeter(self, meter, time, amount):
+        update = {
+            '$set': { 
+                f'Pokemon.meters.{meter}.time': time
+                }
+            }
+        update['$inc'] = {
+            f'Pokemon.meters.{meter}.level': amount
+        }
+        self.updateUser(update)
+
+    @classmethod
+    def getAllUsers(cls):
+        return cls.collection.find({})

@@ -1,10 +1,12 @@
 # all bot commands related to pokemon
 import discord
 from discord.ext import commands
+from bot_commands.interaction import Interaction as inter
 import os, sys
 import io
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from lead import Player
+import random
 
 class Pokemon(commands.Cog):
     def __init__(self, bot):
@@ -52,7 +54,7 @@ class Pokemon(commands.Cog):
             color = discord.Color.dark_teal()
         )
 
-        cap = status['XPCaps'][status['Level']]
+        cap = status['XPCaps'][status['level']]
         exp = f"{int(status['XP'])}/{int(cap)} EXP Points"
 
         percent = status['XP'] / cap
@@ -62,11 +64,26 @@ class Pokemon(commands.Cog):
 
         exp = exp + '\n' + bar
 
-        summary.add_field(name = f'Level: {status["Level"]}', value = exp)
-        summary.add_field(name = "Stomach", value = '░' * barLen, inline = False)
-        summary.add_field(name = "Clean", value = '░' * barLen, inline = False)
-        summary.add_field(name = "Affinity", value = '░' * barLen, inline = False)
-        summary.add_field(name = "Friendship", value = '░' * barLen, inline = False)
+        summary.add_field(name = f'Level: {status["level"]}', value = exp)
+        
+
+        meters = status['meters']
+        bellyPercent = meters['hunger']['level'] / 255
+        bellyFilled = int(bellyPercent * barLen)
+
+        cleanPercent = meters['clean']['level'] / 255
+        cleanFilled = int(cleanPercent * barLen)
+
+        affecPercent = meters['affection']['level'] / 255
+        affecFilled = int(affecPercent * barLen)
+
+        friendPercent = meters['friendship'] / 255
+        friendFilled = int(friendPercent * barLen)
+
+        summary.add_field(name = "Belly", value = ('█' * bellyFilled) + ('░' * (barLen-bellyFilled)) + f' {int(bellyPercent*100)}%', inline = False)
+        summary.add_field(name = "Clean", value = ('█' * cleanFilled) + ('░' * (barLen-cleanFilled)) + f' {int(cleanPercent*100)}%', inline = False)
+        summary.add_field(name = "Affection", value = ('█' * affecFilled) + ('░' * (barLen-affecFilled)) + f'{int(affecPercent*100)}%', inline = False)
+        summary.add_field(name = "Friendship", value = ('█' * friendFilled) + ('░' * (barLen-friendFilled)) + f'{int(friendPercent*100)}%', inline = False)
 
         img = f'{status.get("name").casefold().capitalize()}.gif'    
         binary = status.get("sprite")
@@ -75,6 +92,15 @@ class Pokemon(commands.Cog):
         summary.set_thumbnail(url = f"attachment://{img}")
 
         await ctx.send(file = f, embed = summary)
+
+
+    @commands.command(aliases = ['f', 'b', 'belly', 'eat', 'e'])
+    async def feed(self, ctx):
+        user = Player(ctx.author.id)
+        food = ["Apple", "Banana", "Plain Bean", "Basic Poké Puff", "Curry", "Pokéblock", "Poffin", "Rage Candy Bar", "Lava Cookie", "Old Gateau", "Casteliacone", "Lumiose Galette", "Shalour Sable", "Big Malasada", "Gummi", "Berry"]
+        await inter.feed(user)
+        msg = f"You fed your {user.status.get('name')} 1 {random.choice(food)}!"
+        await ctx.send(msg)
 
     @commands.command(aliases = ['pc', 'p'])
     async def pokemon(self, ctx):
