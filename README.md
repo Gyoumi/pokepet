@@ -18,8 +18,9 @@ A Discord bot for people to level and have basic interactions with their Pokémo
     
     4.1. hunger/feed feature **(DONE)**
     
-    4.2. boredom/play feature
-        4.2.1. add a way to limit spamming of this feature...
+    4.2. boredom/play feature  
+    
+      4.2.1. add a way to limit spamming of this feature...
     
     4.3. dirty/clean feature
     
@@ -27,8 +28,9 @@ A Discord bot for people to level and have basic interactions with their Pokémo
     
     4.5. friendship <- playing and training 
     
-    4.6. training <- evs (allow player to choose stat to raise before training)
-        4.6.1. implement stats!
+    4.6. training <- evs (allow player to choose stat to raise before training)  
+        
+      4.6.1. implement stats!
      
 5. add evolution for pokemon
     
