@@ -6,7 +6,7 @@ def binarySearchExpGain(level):
     mid = 1
     while start < end:
         mid = start + ((end - start)//2)
-        rand = random.randrange(0, 101) * int(0.023 * min(level, 70))
+        rand = random.randrange(0, 101) * (0.023 * min(level, 70))
         if rand > 50:
             start = mid + 1
         else:

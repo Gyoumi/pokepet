@@ -82,8 +82,8 @@ class Pokemon(commands.Cog):
 
         summary.add_field(name = "Belly", value = ('█' * bellyFilled) + ('░' * (barLen-bellyFilled)) + f' {int(bellyPercent*100)}%', inline = False)
         summary.add_field(name = "Clean", value = ('█' * cleanFilled) + ('░' * (barLen-cleanFilled)) + f' {int(cleanPercent*100)}%', inline = False)
-        summary.add_field(name = "Affection", value = ('█' * affecFilled) + ('░' * (barLen-affecFilled)) + f'{int(affecPercent*100)}%', inline = False)
-        summary.add_field(name = "Friendship", value = ('█' * friendFilled) + ('░' * (barLen-friendFilled)) + f'{int(friendPercent*100)}%', inline = False)
+        summary.add_field(name = "Affection", value = ('█' * affecFilled) + ('░' * (barLen-affecFilled)) + f' {int(affecPercent*100)}%', inline = False)
+        summary.add_field(name = "Friendship", value = ('█' * friendFilled) + ('░' * (barLen-friendFilled)) + f' {int(friendPercent*100)}%', inline = False)
 
         img = f'{status.get("name").casefold().capitalize()}.gif'    
         binary = status.get("sprite")
@@ -98,8 +98,8 @@ class Pokemon(commands.Cog):
     async def feed(self, ctx):
         user = Player(ctx.author.id)
         food = ["Apple", "Banana", "Plain Bean", "Basic Poké Puff", "Curry", "Pokéblock", "Poffin", "Rage Candy Bar", "Lava Cookie", "Old Gateau", "Casteliacone", "Lumiose Galette", "Shalour Sable", "Big Malasada", "Gummi", "Berry"]
-        await inter.feed(user)
-        msg = f"You fed your {user.status.get('name')} 1 {random.choice(food)}!"
+        feedStatus = await inter.feed(user)
+        msg = f"You fed your {user.status.get('name')} 1 {random.choice(food)}!" if feedStatus else f"{user.status.get('name')} is full! It can't take another bite!"
         await ctx.send(msg)
 
     @commands.command(aliases = ['pc', 'p'])

@@ -39,14 +39,25 @@ class Interaction(commands.Cog):
             return
         if time + datetime.timedelta(seconds=duration) <= self.currTime:
             player = Player(id)
-            player.updateMeter(name, self.currTime, -1)
+            player.updateMeter(name, self.currTime, -3)
             print("updated " + name + "!")
 
     @classmethod
     async def feed(cls, user):
         cls.currTime = datetime.datetime.now()
-        level = user.status.get("meters").get("hunger").get('level')
-        user.updateMeter("hunger", cls.currTime, min(100, 255-level))
+        meter = user.status.get("meters")
+        hungerLevel = meter.get("hunger").get('level')
+        affectionLevel = meter.get("affection").get('level')
+        if hungerLevel >= 255:
+            return False
+        user.updateMeter("hunger", cls.currTime, min(100, 255-hungerLevel))
+        if affectionLevel <= 255:
+            user.updateMeter("affection", cls.currTime, min(5, 255-affectionLevel))
+        return True
+
+    @classmethod
+    async def clean(cls, user):
+        
 
 def setup(bot):
     bot.add_cog(Interaction(bot))
