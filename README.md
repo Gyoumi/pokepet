@@ -2,14 +2,14 @@
 A Discord bot for people to level and have basic interactions with their Pokémon!
 
 # To Do List:
-1. create generic levelling bot for user (DONE)
-2. make level associate from user to generic pokemon (DONE)
-3. link pokeapi to generic pokemon (DONE)
-    3.1. add image to p.info view (DONE)
-    3.2. limit start choice to only options provided (DONE)
-    3.3. prevent spamming for exp gain (DONE)
+1. create generic levelling bot for user **(DONE)**
+2. make level associate from user to generic pokemon **(DONE)**
+3. link pokeapi to generic pokemon **(DONE)**
+    3.1. add image to p.info view **(DONE)**
+    3.2. limit start choice to only options provided **(DONE)**
+    3.3. prevent spamming for exp gain **(DONE)**
 4. build interactivity with pokemon
-    4.1. hunger/feed feature (DONE)
+    4.1. hunger/feed feature **(DONE)**
     4.2. boredom/play feature
         4.2.1. add a way to limit spamming of this feature...
     4.3. dirty/clean feature
