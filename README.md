@@ -18,7 +18,8 @@ A Discord bot for people to level and have basic interactions with their Pokémo
     6. training <- evs (allow player to choose stat to raise before training)
         1. implement stats!
 5. add evolution for pokemon
-    1. bulbasaur -> ivysaur -> venusaur
+    1. bulbasaur -> ivysaur (1 stage evolution)
+    2. ivysaur -> venusaur (2 stage evolution)
 6. add emotes for rest of starter options
 7. add random wild pokemon spawns
 8. allow storage of pokemon and users to switch between their owned pokemon
