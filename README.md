@@ -11,12 +11,12 @@ A Discord bot for people to level and have basic interactions with their Pokémo
 4. build interactivity with pokemon
     1. hunger/feed feature **(DONE)**
     2. boredom/play feature
-      1. add a way to limit spamming of this feature...
+        1. add a way to limit spamming of this feature...
     3. dirty/clean feature
     4. affection <- feeding and cleaning
     5. friendship <- playing and training 
     6. training <- evs (allow player to choose stat to raise before training)
-      1. implement stats!
+        1. implement stats!
 5. add evolution for pokemon
     1. bulbasaur -> ivysaur -> venusaur
 6. add emotes for rest of starter options
