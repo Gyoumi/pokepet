@@ -1,7 +1,7 @@
 # PokePét
 A Discord bot for people to level and have basic interactions with their Pokémon!
 
-**__To Do List:__**
+# To Do List:
 1. create generic levelling bot for user (DONE)
 2. make level associate from user to generic pokemon (DONE)
 3. link pokeapi to generic pokemon (DONE)
